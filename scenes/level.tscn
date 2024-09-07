@@ -1,0 +1,79 @@
+[gd_scene load_steps=8 format=3 uid="uid://cyaoo7ylyms1c"]
+
+[ext_resource type="Script" path="res://scenes/level.gd" id="1_fgp7v"]
+[ext_resource type="Texture2D" uid="uid://g8ovwf4h0k3b" path="res://graphic/bg-space.png" id="1_yeyjn"]
+[ext_resource type="PackedScene" uid="uid://beer0807sdf8" path="res://scenes/player.tscn" id="2_qi1u3"]
+[ext_resource type="PackedScene" uid="uid://ciufnltw0y2hs" path="res://scenes/ui.tscn" id="4_40i5o"]
+[ext_resource type="AudioStream" uid="uid://bn77eof3geclq" path="res://audio/music.ogg" id="5_68fjr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i4lsv"]
+size = Vector2(1432, 57)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mnxqp"]
+size = Vector2(77, 755)
+
+[node name="Level" type="Node2D" groups=["ui"]]
+script = ExtResource("1_fgp7v")
+
+[node name="Player" parent="." instance=ExtResource("2_qi1u3")]
+position = Vector2(644, 637)
+
+[node name="Borders" type="Node2D" parent="."]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Borders"]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/StaticBody2D"]
+position = Vector2(645, -28)
+shape = SubResource("RectangleShape2D_i4lsv")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="Borders"]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/StaticBody2D2"]
+position = Vector2(641, 748)
+shape = SubResource("RectangleShape2D_i4lsv")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="Borders"]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/StaticBody2D3"]
+position = Vector2(-38.5, 367.5)
+shape = SubResource("RectangleShape2D_mnxqp")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="Borders"]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/StaticBody2D4"]
+position = Vector2(1318, 364)
+shape = SubResource("RectangleShape2D_mnxqp")
+
+[node name="MeteorTimer" type="Timer" parent="."]
+wait_time = 0.25
+autostart = true
+
+[node name="Meteors" type="Node2D" parent="."]
+
+[node name="Lasers" type="Node2D" parent="."]
+
+[node name="UI" parent="." instance=ExtResource("4_40i5o")]
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_68fjr")
+volume_db = -11.243
+autoplay = true
+playback_type = 1
+parameters/looping = true
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(0, 1280)
+
+[node name="Bg-space" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+position = Vector2(640, 349)
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("1_yeyjn")
+
+[connection signal="laser" from="Player" to="." method="_on_player_laser"]
+[connection signal="timeout" from="MeteorTimer" to="." method="_on_meteor_timer_timeout"]
